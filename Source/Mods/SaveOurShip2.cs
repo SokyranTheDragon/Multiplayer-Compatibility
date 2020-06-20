@@ -68,7 +68,7 @@ namespace Multiplayer.Compat.Mods
 
                 // Battle related stuff
                 var inner = AccessTools.Inner(type, "<>c");
-                MP.RegisterSyncWorker<object>(SyncNothing, inner);
+                MP.RegisterSyncWorker<object>(SyncNothing, inner, shouldConstruct: true);
                 MP.RegisterSyncMethod(inner, "<GetGizmos>b__7_12"); // Salvage enemy ship
                 MP.RegisterSyncMethod(inner, "<GetGizmos>b__7_13"); // Cancel salvage enemy ship
                 MP.RegisterSyncMethod(inner, "<GetGizmos>b__7_15"); // Retreat
@@ -82,9 +82,9 @@ namespace Multiplayer.Compat.Mods
                 MP.RegisterSyncMethod(inner, "<GetGizmos>b__7_20"); // Dev enemy stop
                 MP.RegisterSyncMethod(inner, "<GetGizmos>b__7_21"); // Dev enemy advance
                 // Start battle
-                inner = AccessTools.Inner(type, "<>c__DisplayClass7_3");
-                MP.RegisterSyncMethod(inner, "<GetGizmos>b__23"); // Attempt an act of space piracy by attacking trade ship
-                MP.RegisterSyncMethod(inner, "<GetGizmos>b__24"); // Attempt to engage a ship
+                //inner = AccessTools.Inner(type, "<>c__DisplayClass7_3");
+                //MP.RegisterSyncMethod(inner, "<GetGizmos>b__23"); // Attempt an act of space piracy by attacking trade ship
+                //MP.RegisterSyncMethod(inner, "<GetGizmos>b__24"); // Attempt to engage a ship
 
                 // Toggle all shields
                 inner = AccessTools.Inner(type, "<>c__DisplayClass7_1");
