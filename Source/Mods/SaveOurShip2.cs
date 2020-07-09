@@ -7,7 +7,7 @@ using Multiplayer.API;
 using RimWorld;
 using Verse;
 
-namespace Multiplayer.Compat.Mods
+namespace Multiplayer.Compat
 {
     /// <summary>Save Our Ship 2 by Kentington and Thain</summary>
     /// <see href="https://steamcommunity.com/workshop/filedetails/?id=1909914131"/>
