@@ -36,10 +36,14 @@ namespace Multiplayer.Compat
                 }
             }
 
+            LongEventHandler.ExecuteWhenFinished(FullRandomPatch);
+
             harmony.PatchAll();
 
             SyncDictionaryFuture.RegisterSyncWorkers();
         }
+
+        public static void FullRandomPatch() => LongEventHandler.QueueLongEvent(FullRandomPatcher.TranspileAll, "Multiplayer Compat RNG patching", true, null);
 
         public static IEnumerable<MethodInfo> MethodsByIndex(Type type, string prefix, params int[] index)
         {

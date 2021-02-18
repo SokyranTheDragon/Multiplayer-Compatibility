@@ -205,5 +205,69 @@ namespace Multiplayer.Compat
             }
         }
         #endregion
+
+        #region Full RNG patcher
+        internal static IEnumerable<CodeInstruction> FullRNGPatcher(IEnumerable<CodeInstruction> instr)
+        {
+            bool foundRng = false;
+
+            foreach (var ci in instr)
+            {
+                if (ci.opcode == OpCodes.Newobj)
+                {
+                    if (ci.operand is ConstructorInfo constructorInfo && constructorInfo == SystemRandConstructor)
+                    {
+                        if (FullRandomPatcher.ShouldLogSystemRand) foundRng = true;
+                        if (FullRandomPatcher.ShouldReplaceSystemRand) ci.operand = RandRedirectorConstructor;
+                    }
+                }
+                else if (ci.opcode == OpCodes.Call && ci.operand is MethodInfo method)
+                {
+                    if (method == UnityRandomRangeInt || method == UnityRandomRangeIntObsolete)
+                    {
+                        if (FullRandomPatcher.ShouldLogUnityRand) foundRng = true;
+                        if (FullRandomPatcher.ShouldReplaceUnityRand) ci.operand = VerseRandomRangeInt;
+                    }
+                    else if (method == UnityRandomRangeFloat || method == UnityRandomRangeFloatObsolete)
+                    {
+                        if (FullRandomPatcher.ShouldLogUnityRand) foundRng = true;
+                        if (FullRandomPatcher.ShouldReplaceUnityRand) ci.operand = VerseRandomRangeFloat;
+                    }
+                    else if (method == UnityRandomValue)
+                    {
+                        if (FullRandomPatcher.ShouldLogUnityRand) foundRng = true;
+                        if (FullRandomPatcher.ShouldReplaceUnityRand) ci.operand = VerseRandomValue;
+                    }
+                    else if (method == UnityInsideUnitCircle)
+                    {
+                        if (FullRandomPatcher.ShouldLogUnityRand) foundRng = true;
+                        if (FullRandomPatcher.ShouldReplaceUnityRand) ci.operand = VerseInsideUnitCircle;
+                    }
+                }
+            }
+
+            if (foundRng)
+            {
+                return instr;
+            }
+            else
+                throw new PatchingCancelledException("Nothing patched");
+        }
+
+        internal class PatchingCancelledException : Exception
+        {
+            public PatchingCancelledException()
+            {
+            }
+
+            public PatchingCancelledException(string message) : base(message)
+            {
+            }
+
+            public PatchingCancelledException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+        }
+        #endregion
     }
 }
